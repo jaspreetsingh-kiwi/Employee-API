@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student_Details</title>
+</head>
+<body>
+    <center>
+        <form>
+            {% csrf_token %}
+            {{form.as_p}}
+            <input id="b1" type="submit"  value="Submit">
+        </form>
+    </center>
+</body>
+</html>
