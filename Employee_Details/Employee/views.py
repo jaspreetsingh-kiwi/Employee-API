@@ -1,5 +1,5 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+import requests
 # Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -9,9 +9,41 @@ from .models import Employee
 from .serializers import EmployeeSerializer
 
 
-def Details(request):
-    form = EmployeeForm
-    return render(request, 'Home.html', {'form': form})
+def add_employee(request):
+    """
+    Create an instance of the Employee Form.
+    """
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+        if form.is_valid():
+            # Retrieve the cleaned form data
+            data = form.cleaned_data
+            # Send a POST request to the API to add a new employee
+            url = 'http://127.0.0.1:8000/employee/'
+            response = requests.post(url, data=data)
+            # Check if the API response was successful
+            if response.status_code == 201:
+                employee = response.json()
+                return redirect('show_employee')
+    else:
+        form = EmployeeForm()
+    return render(request, 'add_employee.html', {'form': form})
+
+
+def show_employee(request):
+    """
+       Display the instances of the Employee Form.
+    """
+    # Send a GET request to the API to retrieve the employee data
+    url = 'http://127.0.0.1:8000/employee/'
+    response = requests.get(url)
+    # Initialize an empty list to store the employee data
+    employees = []
+    # Check if the API response was successful
+    if response.status_code == 200:
+        # Deserialize the API response and store it in the employees list
+        employees = response.json()
+    return render(request, 'show_employee.html', {'employees': employees})
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -32,7 +64,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
          Returns a list of all instances of the Employee model.
         """
         serializer = self.serializer_class(self.get_queryset(), many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -40,7 +72,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         instance = self.get_object()
         serializer = self.serializer_class(instance)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """
