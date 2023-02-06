@@ -14,5 +14,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('add_employee/', views.add_employee, name='add_employee'),
     path('show_employee/', views.show_employee, name='show_employee'),
+    path('update_employee/<int:pk>/', views.update_employee, name='update_employee'),
 
 ]

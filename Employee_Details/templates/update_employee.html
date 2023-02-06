@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Data</title>
+    <style>
+      #f4 {
+          border: 2px solid black;
+          width: 400px;
+          padding: 5px;
+          background-color: #04AA6D;
+      }
+
+    </style>
+</head>
+<body>
+<center>
+  {% if employee %}
+      <form id="f4" action="{% url 'update_employee' pk=employee.id %}" method="post">
+        {% csrf_token %}
+        <label for="name">Employee Name:</label>
+        <input type="text" id="name" name="name" value="{{employee.name}}">
+         <br>
+         <br>
+        <label for="eid">Employee ID:</label>
+        <input type="text" id="eid" name="eid" value="{{employee.eid}}">
+         <br>
+         <br>
+        <label for="phone">Employee Phone:</label>
+        <input type="text" id="phone" name="phone" value="{{employee.phone}}">
+         <br>
+         <br>
+        <label for="email">Employee Email:</label>
+        <input type="text" id="email" name="email" value="{{employee.email}}">
+        <br><br>
+        <label for="address">Employee Address:</label>
+        <input type="text" id="address" name="address" value="{{employee.address}}">
+        <br><br>
+        <label for="city">Employee City:</label>
+        <input type="text" id="city" name="city" value="{{employee.city}}">
+        <br><br>
+        <label for="state">Employee State:</label>
+        <input type="text" id="state" name="state" value="{{employee.state}}">
+        <br><br>
+        <label for="company">Employee Company:</label>
+        <input type="text" id="company" name="company" value="{{employee.company}}">
+        <br><br>
+        <label for="department">Employee Department:</label>
+        <input type="text" id="department" name="department" value="{{employee.department}}">
+        <br><br>
+        <input type="submit" value="Update">
+      </form>
+  {% endif %}
+</center>
+</body>
+</html>

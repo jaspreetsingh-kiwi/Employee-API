@@ -1,3 +1,4 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 import requests
 # Create your views here.
@@ -46,6 +47,44 @@ def show_employee(request):
     return render(request, 'show_employee.html', {'employees': employees})
 
 
+def update_employee(request, pk):
+    # Send a GET request to the API to retrieve the employee data
+    url = f'http://127.0.0.1:8000/employee/{pk}/'
+    response = requests.get(url)
+
+    # Check if the API response was successful
+    if response.status_code == 200:
+        # Deserialize the API response and store it in a dictionary
+        employee_data = response.json()
+
+        # Convert the dictionary into a model instance
+        employee = Employee(**employee_data)
+
+        # Populate the form with the employee data
+        form = EmployeeForm(initial=employee)
+
+        # Check if the form was submitted
+        if request.method == 'POST':
+            # Bind the form data to the form instance
+            form = EmployeeForm(request.POST, instance=employee)
+
+            # Check if the form is valid
+            if form.is_valid():
+                # Send a PUT request to the API to update the employee data
+                response = requests.put(url, data=form.cleaned_data)
+
+                # Check if the API response was successful
+                if response.status_code == 200:
+                    # Redirect the user to the success page
+                    return redirect('show_employee')
+
+        # Render the update employee template with the form
+        return render(request, 'update_employee.html', {'form': form})
+
+    # Return an error response if the API response was not successful
+    return HttpResponseBadRequest()
+
+
 class EmployeeViewSet(viewsets.ModelViewSet):
     """
     The EmployeeViewSet class provides the CRUD (Create, Retrieve, Update, Delete) operations for the Employee model.
@@ -55,7 +94,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        The get_queryset method returns a queryset of YourModel objects.
+        The get_queryset method returns a queryset of Employee Model objects.
         """
         return Employee.objects.all()
 

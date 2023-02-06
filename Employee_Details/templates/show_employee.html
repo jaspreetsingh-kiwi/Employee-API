@@ -89,6 +89,8 @@
             <th>Employee State</th>
             <th>Employee Company</th>
             <th>Employee Department</th>
+            <th>Update</th>
+
 
         </tr>
         {% for employee in employees %}
@@ -102,6 +104,12 @@
                 <td>{{ employee.state}}</td>
                 <td>{{ employee.company}}</td>
                 <td>{{ employee.department}}</td>
+                <td>
+                    <form class="" name="EditForm" action="{% url 'update_employee' pk=employee.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Update">
+                    </form>
+                 </td>
             </tr>
         {% endfor %}
     </table>
