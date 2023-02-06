@@ -17,7 +17,7 @@
 <body>
 
     <center>
-        <form id="f1" action="{% url 'add_employee' %}" method="post">
+        <form id="f1" action="{% url 'create_employee' %}" method="post">
             {% csrf_token %}
             {{form.as_p}}
             <input id="b1" type="submit"  value="Submit">

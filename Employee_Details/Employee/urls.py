@@ -12,8 +12,10 @@ router.register('employee', views.EmployeeViewSet, basename='employee')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('add_employee/', views.add_employee, name='add_employee'),
-    path('show_employee/', views.show_employee, name='show_employee'),
+    path('create_employee/', views.create_employee, name='create_employee'),
+    path('list_employee/', views.list_employee, name='list_employee'),
+    path('retrieve_employee/<int:pk>', views.retrieve_employee, name='retrieve_employee'),
     path('update_employee/<int:pk>/', views.update_employee, name='update_employee'),
+    path('delete_employee/<int:pk>/', views.delete_employee, name='delete_employee'),
 
 ]

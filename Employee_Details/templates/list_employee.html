@@ -90,6 +90,8 @@
             <th>Employee Company</th>
             <th>Employee Department</th>
             <th>Update</th>
+            <th>Delete</th>
+
 
 
         </tr>
@@ -105,9 +107,15 @@
                 <td>{{ employee.company}}</td>
                 <td>{{ employee.department}}</td>
                 <td>
-                    <form class="" name="EditForm" action="{% url 'update_employee' pk=employee.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Update">
+                    <form class="" name="UpdateForm" action="{% url 'update_employee' pk=employee.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Update">
+                    </form>
+                 </td>
+                 <td>
+                    <form class="" name="DeleteForm" action="{% url 'delete_employee' pk=employee.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete">
                     </form>
                  </td>
             </tr>
