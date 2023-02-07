@@ -2,30 +2,32 @@ from rest_framework import serializers
 from .models import Employee
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class EmployeeCreateSerializer(serializers.ModelSerializer):
     """
     Define the serializer class for the Employee model
     """
-    name = serializers.CharField(max_length=20)
-    eid = serializers.IntegerField()
-    phone = serializers.CharField(max_length=10)
-    email = serializers.CharField(max_length=20)
-    address = serializers.CharField(max_length=20)
-    city = serializers.CharField(max_length=20)
-    state = serializers.CharField(max_length=20)
-    company = serializers.CharField(max_length=20)
-    department = serializers.CharField(max_length=20)
+    name = serializers.CharField(max_length=20, required=True)
+    eid = serializers.IntegerField(required=True)
+    phone = serializers.CharField(max_length=10, required=True)
+    email = serializers.CharField(max_length=20, required=True)
+    address = serializers.CharField(max_length=20, required=True)
+    city = serializers.CharField(max_length=20, required=True)
+    state = serializers.CharField(max_length=20, required=True)
+    company = serializers.CharField(max_length=20, required=True)
+    department = serializers.CharField(max_length=20, required=True)
 
     """
     Use the Meta class to specify the model and fields that the serializer should work with
     """
+
     class Meta:
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
 
     """
-     Override the create method to add custom behavior when creating a new Employee instance
-    """
+         Override the create method to add custom behavior when creating a new Employee instance
+        """
+
     def create(self, validated_data):
         emp = Employee.objects.create(
             name=validated_data['name'],
@@ -41,9 +43,33 @@ class EmployeeSerializer(serializers.ModelSerializer):
         )
         return emp
 
+
+class EmployeeUpdateSerializer(serializers.ModelSerializer):
+    """
+       Define the serializer class for the Employee model
+    """
+    name = serializers.CharField(max_length=20, required=True)
+    eid = serializers.IntegerField(required=True)
+    phone = serializers.CharField(max_length=10, required=True)
+    email = serializers.CharField(max_length=20, required=True)
+    address = serializers.CharField(max_length=20, required=True)
+    city = serializers.CharField(max_length=20, required=True)
+    state = serializers.CharField(max_length=20, required=True)
+    company = serializers.CharField(max_length=20, required=True)
+    department = serializers.CharField(max_length=20, required=True)
+
+    """
+        Use the Meta class to specify the model and fields that the serializer should work with
+    """
+
+    class Meta:
+        model = Employee
+        fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
+
     """
     Override the update method to add custom behavior when updating an existing Employee instance
     """
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.eid = validated_data.get('eid', instance.eid)

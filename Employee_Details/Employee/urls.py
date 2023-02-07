@@ -10,6 +10,7 @@ router = DefaultRouter()
 """
 router.register('employee', views.EmployeeViewSet, basename='employee')
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('create_employee/', views.create_employee, name='create_employee'),
