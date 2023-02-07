@@ -48,15 +48,15 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
     """
        Define the serializer class for the Employee model
     """
-    name = serializers.CharField(max_length=20, required=True)
-    eid = serializers.IntegerField(required=True)
-    phone = serializers.CharField(max_length=10, required=True)
-    email = serializers.CharField(max_length=20, required=True)
-    address = serializers.CharField(max_length=20, required=True)
-    city = serializers.CharField(max_length=20, required=True)
-    state = serializers.CharField(max_length=20, required=True)
-    company = serializers.CharField(max_length=20, required=True)
-    department = serializers.CharField(max_length=20, required=True)
+    name = serializers.CharField(max_length=20)
+    eid = serializers.IntegerField()
+    phone = serializers.CharField(max_length=10)
+    email = serializers.CharField(max_length=20)
+    address = serializers.CharField(max_length=20)
+    city = serializers.CharField(max_length=20)
+    state = serializers.CharField(max_length=20)
+    company = serializers.CharField(max_length=20)
+    department = serializers.CharField(max_length=20)
 
     """
         Use the Meta class to specify the model and fields that the serializer should work with
@@ -81,5 +81,4 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
         instance.company = validated_data.get('company', instance.company)
         instance.department = validated_data.get('department', instance.department)
         instance.save()
-        # instance.perform_update()
         return instance
