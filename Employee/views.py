@@ -95,6 +95,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     The EmployeeViewSet class provides the CRUD (Create, Retrieve, Update, Delete) operations for the Employee model.
     """
     queryset = Employee
+
     # filter_backends = [SearchFilter, OrderingFilter]
     # search_fields = ['^name']
     # ordering_fields = ['id']
@@ -103,10 +104,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         The get_serializer_class method returns a ModelSerializer of Employee Model objects.
         """
-        if self.action == ['list', 'create']:
+        if self.action in ['list', 'create']:
             return EmployeeCreateSerializer
-        else:
-            return EmployeeUpdateSerializer
+        return EmployeeUpdateSerializer
 
     def get_queryset(self):
         """
@@ -118,24 +118,21 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
          Returns a list of all instances of the Employee model.
         """
-        serializer_class = self.get_serializer_class()
-        serializer = serializer_class(self.get_queryset(), many=True)
+        serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieves a single instance of the Employee model, based on the primary key (pk).
         """
-        serializer_class = self.get_serializer_class()
-        serializer = serializer_class(self.get_object())
+        serializer = self.get_serializer(self.get_object())
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """
         Creates a new instance of the Employee model.
         """
-        serializer_class = self.get_serializer_class()
-        serializer = serializer_class(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': CREATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
@@ -145,8 +142,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        serializer_class = self.get_serializer_class()
-        serializer = serializer_class(self.get_object(), data=request.data)
+        serializer = self.get_serializer(self.get_object(), data=request.data)
         if serializer.is_valid():
             serializer.update(self.get_object(), serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
@@ -156,8 +152,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Partial Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        serializer_class = self.get_serializer_class()
-        serializer = serializer_class(self.get_object(), data=request.data, partial=True)
+        serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
             serializer.update(self.get_object(), serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
