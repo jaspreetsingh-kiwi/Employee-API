@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b65df282-bf76-4135-a8ae-73784b1ed842" name="Changes" comment="" />
+    <list default="true" id="b65df282-bf76-4135-a8ae-73784b1ed842" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Music.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Music.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Employee/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Employee/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Employee/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EmployeeDetails/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/EmployeeDetails/settings.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +37,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/home/kiwitech/Music/Employee_Details"
+    "last_opened_file_path": "/home/kiwitech/Desktop/Generic "
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

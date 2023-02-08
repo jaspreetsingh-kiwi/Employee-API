@@ -7,7 +7,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
     Define the serializer class for the Employee model
     """
     name = serializers.CharField(max_length=20, required=True)
-    eid = serializers.IntegerField(required=True, )
+    eid = serializers.IntegerField(required=True)
     phone = serializers.CharField(max_length=10, required=True)
     email = serializers.CharField(max_length=20, required=True)
     address = serializers.CharField(max_length=20, required=True)
@@ -23,16 +23,6 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
-
-    def validate_eid(self, value):
-        if value <= 0:
-            raise serializers.ValidationError('Employee ID is not valid')
-        return value
-
-    # def validate(self, attrs):
-    #     if attrs.get('name') == 'Jaspreet' and attrs.get('company') != 'Kiwitech':
-    #         raise serializers.ValidationError('Data Already Exists')
-    #     return attrs
 
     """
          Override the create method to add custom behavior when creating a new Employee instance
