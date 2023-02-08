@@ -16,29 +16,33 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
     company = serializers.CharField(max_length=20, required=True)
     department = serializers.CharField(max_length=20, required=True)
 
-    """
-    Use the Meta class to specify the model and fields that the serializer should work with
-    """
-
     class Meta:
+        """
+            Use the Meta class to specify the model and fields that the serializer should work with
+        """
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
 
     def validate_eid(self, value):
+        """
+        Validate if employee id is less than 0.
+        """
         if value <= 0:
-            raise serializers.ValidationError('Employee ID is not valid')
+            raise serializers.ValidationError('Employee is not valid')
         return value
 
     def validate_email(self, value):
+        """
+        Validate if employee email already exists.
+        """
         if Employee.objects.filter(email=value).exists():
             raise serializers.ValidationError('Email already exists')
         return value
 
-    """
-    Override the create method to add custom behavior when creating a new Employee instance
-    """
-
     def create(self, validated_data):
+        """
+        Override the create method to add custom behavior when creating a new Employee instance
+        """
         emp = Employee.objects.create(
             name=validated_data['name'],
             eid=validated_data['eid'],
@@ -68,29 +72,33 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
     company = serializers.CharField(max_length=20, required=True)
     department = serializers.CharField(max_length=20, required=True)
 
-    """
-        Use the Meta class to specify the model and fields that the serializer should work with
-    """
-
     class Meta:
+        """
+            Use the Meta class to specify the model and fields that the serializer should work with
+        """
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
 
     def validate_eid(self, value):
+        """
+        Validate if employee id is less than 0.
+        """
         if value <= 0:
             raise serializers.ValidationError('Employee is not valid')
         return value
 
     def validate_email(self, value):
+        """
+        Validate if employee email already exists.
+        """
         if Employee.objects.filter(email=value).exists():
             raise serializers.ValidationError('Email already exists')
         return value
 
-    """
-    Override the update method to add custom behavior when updating an existing Employee instance
-    """
-
     def update(self, instance, validated_data):
+        """
+         Override the update method to add custom behavior when updating an existing Employee instance
+        """
         instance.name = validated_data.get('name', instance.name)
         instance.eid = validated_data.get('eid', instance.eid)
         instance.phone = validated_data.get('phone', instance.phone)

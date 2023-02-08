@@ -96,9 +96,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     queryset = Employee
 
-    # filter_backends = [SearchFilter, OrderingFilter]
-    # search_fields = ['^name']
-    # ordering_fields = ['id']
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['^name']
+    ordering_fields = ['id']
 
     def get_serializer_class(self):
         """
@@ -142,9 +142,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        serializer = self.get_serializer(self.get_object(), data=request.data)
+        emp = self.get_object()
+        serializer = self.get_serializer(emp, data=request.data)
         if serializer.is_valid():
-            serializer.update(self.get_object(), serializer.validated_data)
+            serializer.update(emp, serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
@@ -152,9 +153,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Partial Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
+        emp = self.get_object()
+        serializer = self.get_serializer(emp, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.update(self.get_object(), serializer.validated_data)
+            serializer.update(emp, serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
