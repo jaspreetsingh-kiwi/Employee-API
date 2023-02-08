@@ -24,9 +24,19 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
 
+    def validate_eid(self, value):
+        if value <= 0:
+            raise serializers.ValidationError('Employee ID is not valid')
+        return value
+
+    def validate_email(self, value):
+        if Employee.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email already exists')
+        return value
+
     """
-         Override the create method to add custom behavior when creating a new Employee instance
-        """
+    Override the create method to add custom behavior when creating a new Employee instance
+    """
 
     def create(self, validated_data):
         emp = Employee.objects.create(
@@ -65,6 +75,16 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
+
+    def validate_eid(self, value):
+        if value <= 0:
+            raise serializers.ValidationError('Employee is not valid')
+        return value
+
+    def validate_email(self, value):
+        if Employee.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email already exists')
+        return value
 
     """
     Override the update method to add custom behavior when updating an existing Employee instance
