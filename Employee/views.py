@@ -126,9 +126,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Retrieves a single instance of the Employee model, based on the primary key (pk).
         """
-        instance = self.get_object()
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(instance)
+        serializer = serializer_class(self.get_object())
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
@@ -146,11 +145,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        emp = self.get_object()
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(emp, data=request.data)
+        serializer = serializer_class(self.get_object(), data=request.data)
         if serializer.is_valid():
-            serializer.update(emp, serializer.validated_data)
+            serializer.update(self.get_object(), serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
@@ -158,11 +156,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Partial Updates an existing instance of the Employee model, based on the primary key (pk).
         """
-        emp = self.get_object()
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(emp, data=request.data, partial=True)
+        serializer = serializer_class(self.get_object(), data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.update(emp, serializer.validated_data)
+            serializer.update(self.get_object(), serializer.validated_data)
             return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
@@ -170,6 +167,5 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         Deletes a single instance of the Employee model, based on the primary key (pk).
         """
-        emp = self.get_object()
-        emp.delete()
+        self.get_object().delete()
         return Response({'message': DELETED_SUCCESSFULLY})
