@@ -1,16 +1,14 @@
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 import requests
-# Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
-
 from .forms import EmployeeForm
+from .messages import CREATED_SUCCESSFULLY, BAD_REQUEST, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY, EMPLOYEE_API
 from .models import Employee
 from .serializers import EmployeeUpdateSerializer, EmployeeCreateSerializer
 
 
+# Create your views here.
 def create_employee(request):
     """
     Create an instance of the Employee.
@@ -21,7 +19,7 @@ def create_employee(request):
             # Retrieve the cleaned form data
             data = form.cleaned_data
             # Send a POST request to the API to add a new employee
-            url = 'http://127.0.0.1:8000/employee/'
+            url = EMPLOYEE_API
             response = requests.post(url, data=data)
             # Check if the API response was successful
             if response.status_code == 201:
@@ -34,27 +32,26 @@ def create_employee(request):
 
 def list_employee(request):
     """
-       Display the instances of the Employee.
+    Display the instances of the Employee.
     """
     # Send a GET request to the API to retrieve the employee data
-    response = requests.get("http://127.0.0.1:8000/employee/")
+    response = requests.get(EMPLOYEE_API)
     employees = response.json()
     return render(request, 'list_employee.html', {'employees': employees})
 
 
 def retrieve_employee(request, pk):
     """
-          Display the single instance of the Employee.
+    Display the single instance of the Employee.
     """
-    response = requests.get(f"http://127.0.0.1:8000/employee/{pk}/")
+    response = requests.get(f"{EMPLOYEE_API}{pk}/")
     employee = response.json()
     return render(request, 'retrieve_employee.html', {'employee': employee})
 
 
 def update_employee(request, pk):
-    response = requests.get(f"http://127.0.0.1:8000/employee/{pk}/")
+    response = requests.get(f"{EMPLOYEE_API}{pk}/")
     data = response.json()
-    print(data)
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
         if form.is_valid():
@@ -69,8 +66,7 @@ def update_employee(request, pk):
                     'company': form.cleaned_data['company'],
                     'department': form.cleaned_data['department'],
                     }
-            print(data)
-            response = requests.put(f'http://127.0.0.1:8000/employee/{pk}/', data=data)
+            response = requests.put(f"{EMPLOYEE_API}{pk}/", data=data)
             if response.status_code == 201:
                 return redirect('list_employee')
             else:
@@ -82,12 +78,10 @@ def update_employee(request, pk):
 
 def delete_employee(request, pk):
     """
-       Delete the selected Employee instance.
+    Delete the selected Employee instance.
     """
     # Send a DELETE request to the API to delete the employee
-    url = f'http://127.0.0.1:8000/employee/{pk}/'
-    response = requests.delete(url)
-
+    response = requests.delete(f"{EMPLOYEE_API}{pk}/")
     # Redirect the user back to the list of employees after to delete
     return redirect('list_employee')
 
@@ -108,7 +102,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         The get_queryset method returns a queryset of Employee Model objects.
         """
-        return Employee.objects.all()
+        return Employee.objects.filter().order_by('id')
 
     def list(self, request, *args, **kwargs):
         """
@@ -132,8 +126,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': CREATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         """
@@ -142,9 +136,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         emp = self.get_object()
         serializer = self.get_serializer(emp, data=request.data)
         if serializer.is_valid():
-            self.perform_update(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.update(emp, serializer.validated_data)
+            return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         """
@@ -153,9 +147,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         emp = self.get_object()
         serializer = self.get_serializer(emp, data=request.data, partial=True)
         if serializer.is_valid():
-            self.partial_update(serializer)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.update(emp, serializer.validated_data)
+            return Response({'message': UPDATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -163,4 +157,4 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         emp = self.get_object()
         emp.delete()
-        return Response({'msg': 'Data Deleted'})
+        return Response({'message': DELETED_SUCCESSFULLY})
