@@ -74,7 +74,7 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         """
-            Use the Meta class to specify the model and fields that the serializer should work with
+        Use the Meta class to specify the model and fields that the serializer should work with
         """
         model = Employee
         fields = ['id', 'name', 'eid', 'phone', 'email', 'address', 'city', 'state', 'company', 'department']
@@ -87,26 +87,20 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Employee is not valid')
         return value
 
-    def validate_email(self, value):
-        """
-        Validate if employee email already exists.
-        """
-        if Employee.objects.filter(email=value).exists():
-            raise serializers.ValidationError('Email already exists')
-        return value
-
     def update(self, instance, validated_data):
         """
          Override the update method to add custom behavior when updating an existing Employee instance
         """
-        instance.name = validated_data.get('name', instance.name)
-        instance.eid = validated_data.get('eid', instance.eid)
-        instance.phone = validated_data.get('phone', instance.phone)
-        instance.email = validated_data.get('email', instance.email)
-        instance.address = validated_data.get('address', instance.address)
-        instance.city = validated_data.get('city', instance.city)
-        instance.state = validated_data.get('state', instance.state)
-        instance.company = validated_data.get('company', instance.company)
-        instance.department = validated_data.get('department', instance.department)
-        instance.save()
-        return instance
+        emp = Employee.objects.filter(id=instance.id).update(
+            name=validated_data['name'],
+            eid=validated_data['eid'],
+            phone=validated_data['phone'],
+            email=validated_data['email'],
+            address=validated_data['address'],
+            city=validated_data['city'],
+            state=validated_data['state'],
+            company=validated_data['company'],
+            department=validated_data['department'],
+        )
+        # Retrieve updated instance from the database
+        return emp

@@ -6,7 +6,11 @@ from .forms import EmployeeForm
 from .messages import CREATED_SUCCESSFULLY, BAD_REQUEST, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY, EMPLOYEE_API
 from .models import Employee
 from .serializers import EmployeeUpdateSerializer, EmployeeCreateSerializer
+
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly, \
+    DjangoModelPermissions, DjangoModelPermissionsOrAnonReadOnly
 
 
 # Create your views here.
@@ -20,8 +24,7 @@ def create_employee(request):
             # Retrieve the cleaned form data
             data = form.cleaned_data
             # Send a POST request to the API to add a new employee
-            url = EMPLOYEE_API
-            response = requests.post(url, data=data)
+            response = requests.post(EMPLOYEE_API, data=data)
             # Check if the API response was successful
             if response.status_code == 201:
                 employee = response.json()
@@ -52,7 +55,7 @@ def retrieve_employee(request, pk):
 
 def update_employee(request, pk):
     """
-      Update the selected instance of the Employee.
+    Update the selected instance of the Employee.
     """
     response = requests.get(f"{EMPLOYEE_API}{pk}/")
     data = response.json()
@@ -95,10 +98,18 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     The EmployeeViewSet class provides the CRUD (Create, Retrieve, Update, Delete) operations for the Employee model.
     """
     queryset = Employee
+    # authentication_classes = [SessionAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [AllowAny]
+    # permission_classes = [IsAdminUser]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [DjangoModelPermissions]
+    # permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-    filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['^name']
-    ordering_fields = ['id']
+    # filter_backends = [SearchFilter, OrderingFilter]
+    # search_fields = ['^name']
+    # ordering_fields = ['id']
 
     def get_serializer_class(self):
         """
@@ -134,7 +145,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.create(serializer.validated_data)
+            print(serializer.data)
             return Response({'message': CREATED_SUCCESSFULLY, 'data': serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'message': BAD_REQUEST}, status.HTTP_400_BAD_REQUEST)
 

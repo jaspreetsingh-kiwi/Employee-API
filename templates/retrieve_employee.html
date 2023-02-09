@@ -106,8 +106,7 @@
                 <td>{{ employee.company}}</td>
                 <td>{{ employee.department}}</td>
                 <td>
-                    <form class="" name="UpdateForm" action="{% url 'update_employee' pk=employee.id %}" method="post">
-                        {% csrf_token %}
+                    <form class="" name="UpdateForm" action="{% url 'update_employee' pk=employee.id %}">
                         <input type="submit" value="Update">
                     </form>
                  </td>
