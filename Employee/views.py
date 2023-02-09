@@ -62,7 +62,9 @@ def update_employee(request, pk):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
         if form.is_valid():
-            # Use the form data to update the data through the API
+            """
+            Use the form data to update the data through the API
+            """
             data = {'name': form.cleaned_data['name'],
                     'eid': form.cleaned_data['eid'],
                     'phone': form.cleaned_data['phone'],
@@ -87,9 +89,7 @@ def delete_employee(request, pk):
     """
     Delete the selected Employee instance.
     """
-    # Send a DELETE request to the API to delete the employee
     response = requests.delete(f"{EMPLOYEE_API}{pk}/")
-    # Redirect the user back to the list of employees after to delete
     return redirect('list_employee')
 
 
