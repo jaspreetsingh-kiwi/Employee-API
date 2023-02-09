@@ -1,0 +1,22 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Update Data</title>
+        <style>
+        #f2 {
+            border: 2px solid black;
+            width: 400px;
+            padding: 5px;
+            background-color: #04AA6D;
+        }
+    </style>
+    </head>
+        <body>
+               <form id="f2" method="post">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <input type="submit" value="Update">
+                </form>
+
+        </body>
+</html>

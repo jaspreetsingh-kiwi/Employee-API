@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Data</title>
+    <style>
+        #t1 {
+          font-family: Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        #t1 td, #t1 th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+
+        #t1 tr:nth-child(even){background-color: #f2f2f2;}
+
+        #t1 tr:hover {background-color: #ddd;}
+
+        #t1 th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #04AA6D;
+          color: white;
+        }
+        #t2 {
+          font-family: Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        #t2 td, #t2 th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+
+        #t2 tr:nth-child(even){background-color: #f2f2f2;}
+
+        #t2 tr:hover {background-color: #ddd;}
+
+        #t2 th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #04AA6D;
+          color: white;
+        }
+
+
+        #f2 {
+            margin-left: 1100px;
+        }
+
+        #f3 {
+            margin-left: 1100px;
+        }
+
+        div{
+            border: 2px solid black;
+            width: 200px;
+            background-color: #04AA6D;
+        }
+        h2{
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <center>
+        <div>
+            <h2>Employee Data</h2>
+        </div>
+    </center>
+
+    <table id="t1">
+        <tr>
+            <th>Employee Name</th>
+            <th>Employee ID</th>
+            <th>Employee Phone</th>
+            <th>Employee Email</th>
+            <th>Employee Address</th>
+            <th>Employee City</th>
+            <th>Employee State</th>
+            <th>Employee Company</th>
+            <th>Employee Department</th>
+            <th>Update</th>
+            <th>Delete</th>
+
+
+
+        </tr>
+            <tr>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.eid }}</td>
+                <td>{{ employee.phone }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.address}}</td>
+                <td>{{ employee.city}}</td>
+                <td>{{ employee.state}}</td>
+                <td>{{ employee.company}}</td>
+                <td>{{ employee.department}}</td>
+                <td>
+                    <form class="" name="UpdateForm" action="{% url 'update_employee' pk=employee.id %}">
+                        <input type="submit" value="Update">
+                    </form>
+                 </td>
+                 <td>
+                    <form class="" name="DeleteForm" action="{% url 'delete_employee' pk=employee.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete">
+                    </form>
+                 </td>
+            </tr>
+    </table>
